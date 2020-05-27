@@ -2,7 +2,7 @@
 
 build_test_wrappers()
 {
-    if [[ "$__BuildTestWrappers" -ne -0 ]]; then
+    if [[ "$__SkipTestWrappers" -eq -0 ]]; then
         echo "${__MsgPrefix}Creating test wrappers..."
 
         if [[ $__Mono -eq 1 ]]; then
@@ -544,13 +544,14 @@ handle_arguments_local() {
             ;;
 
         skiptestwrappers|-skiptestwrappers)
-            __BuildTestWrappers=0
+            __SkipTestWrappers=1
             ;;
 
         copynativeonly|-copynativeonly)
             __SkipStressDependencies=1
             __SkipNative=1
             __SkipManaged=1
+            __SkipTestWrappers=1
             __CopyNativeTestBinaries=1
             __CopyNativeProjectsAfterCombinedTestBuild=true
             __SkipGenerateLayout=1
@@ -561,6 +562,7 @@ handle_arguments_local() {
             __SkipStressDependencies=1
             __SkipNative=1
             __SkipManaged=1
+            __SkipTestWrappers=1
             __SkipGenerateLayout=1
             ;;
 
@@ -581,11 +583,20 @@ handle_arguments_local() {
             ;;
 
         generatetesthostonly|-generatetesthostonly)
-            __GenerateTestHostOnly=1
+            __SkipStressDependencies=1
+            __SkipNative=1
+            __SkipManaged=1
+            __SkipTestWrappers=1
+            __SkipCrossgenFramework=1
             ;;
 
         generatelayoutonly|-generatelayoutonly)
+            __SkipStressDependencies=1
+            __SkipNative=1
+            __SkipManaged=1
+            __SkipTestWrappers=1
             __GenerateLayoutOnly=1
+            __SkipCrossgenFramework=1
             ;;
 
         priority1|-priority1)
@@ -634,8 +645,6 @@ __IncludeTests=INCLUDE_TESTS
 __ProjectDir="$__ProjectRoot"
 export __ProjectDir
 
-__BuildTestWrappers=1
-__BuildTestWrappersOnly=
 __Compiler=clang
 __CompilerMajorVersion=
 __CompilerMinorVersion=
@@ -650,7 +659,6 @@ __DoCrossgen2=0
 __CompositeBuildMode=0
 __DotNetCli="$__RepoRootDir/dotnet.sh"
 __GenerateLayoutOnly=
-__GenerateTestHostOnly=
 __IsMSBuildOnNETCoreSupported=0
 __MSBCleanBuildArgs=
 __NativeTestIntermediatesDir=
@@ -666,6 +674,7 @@ __SkipNative=0
 __SkipRestore=""
 __SkipRestorePackages=0
 __SkipStressDependencies=0
+__SkipTestWrappers=0
 __SkipCrossgenFramework=0
 __SourceDir="$__ProjectDir/src"
 __UnprocessedBuildArgs=
