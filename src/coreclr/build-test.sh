@@ -380,9 +380,10 @@ build_Tests()
         fi
 
         echo "Managed tests build success!"
-
-        build_test_wrappers
     fi
+
+    if [[ "$__SkipManaged" != 1 ]]; then
+        build_test_wrappers
 
     if [[ "$__CopyNativeTestBinaries" == 1 ]]; then
         echo "Copying native test binaries to output..."
@@ -398,9 +399,6 @@ build_Tests()
     if [[ -n "$__UpdateInvalidPackagesArg" ]]; then
         __up="/t:UpdateInvalidPackageVersions"
     fi
-
-    generate_layout
-    precompile_framework
 }
 
 build_MSBuild_projects()
@@ -538,7 +536,11 @@ __BuildArch=
 handle_arguments_local() {
     case "$1" in
         buildtestwrappersonly|-buildtestwrappersonly)
-            __BuildTestWrappersOnly=1
+            __SkipStressDependencies=1
+            __SkipManaged=1
+            __SkipNative=1
+            __SkipGenerateLayout=1
+            __SkipCrossgenFramework=1
             ;;
 
         skiptestwrappers|-skiptestwrappers)
@@ -713,12 +715,7 @@ if [[ -z "$HOME" ]]; then
     echo "HOME not defined; setting it to $HOME"
 fi
 
-if [[ (-z "$__GenerateLayoutOnly") && (-z "$__GenerateTestHostOnly") && (-z "$__BuildTestWrappersOnly") ]]; then
-    build_Tests
-elif [[ ! -z "$__BuildTestWrappersOnly" ]]; then
-    build_test_wrappers
-fi
-
+build_Tests
 generate_layout
 precompile_framework
 
