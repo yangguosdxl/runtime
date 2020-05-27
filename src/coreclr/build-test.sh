@@ -274,7 +274,7 @@ function is_skip_crossgen_test {
     return 1
 }
 
-build_Tests()
+build_tests()
 {
     echo "${__MsgPrefix}Building Tests..."
 
@@ -381,10 +381,10 @@ build_Tests()
 
         echo "Managed tests build success!"
     fi
+}
 
-    if [[ "$__SkipManaged" != 1 ]]; then
-        build_test_wrappers
-
+copy_native_binaries()
+{
     if [[ "$__CopyNativeTestBinaries" == 1 ]]; then
         echo "Copying native test binaries to output..."
 
@@ -715,7 +715,9 @@ if [[ -z "$HOME" ]]; then
     echo "HOME not defined; setting it to $HOME"
 fi
 
-build_Tests
+build_tests
+build_test_wrappers
+copy_native_binaries
 generate_layout
 precompile_framework
 
