@@ -5,10 +5,12 @@
 #
 
 import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(sys.argv[0])))
+
 import xml.dom.minidom as DOM
 from utilities import open_for_update
 import argparse
-import sys
 
 generatedCodeFileHeader="""// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.

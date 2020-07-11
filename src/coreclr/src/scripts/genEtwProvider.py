@@ -6,10 +6,12 @@
 ## This script generates the interface to ETW using MC.exe
 
 import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(sys.argv[0])))
+
 from os import path
 import shutil
 import re
-import sys
 import argparse
 import subprocess
 import xml.dom.minidom as DOM

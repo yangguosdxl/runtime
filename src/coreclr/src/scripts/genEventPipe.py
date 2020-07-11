@@ -1,7 +1,11 @@
 from __future__ import print_function
+
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(sys.argv[0])))
+
 from genEventing import *
 from genLttngProvider import *
-import os
 import xml.dom.minidom as DOM
 from utilities import open_for_update, parseExclusionList
 
